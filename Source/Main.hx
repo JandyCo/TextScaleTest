@@ -5,8 +5,11 @@ import openfl.events.Event;
 
 import openfl.text.*;
 
+import BitmapText;
+
 class Main extends Sprite {
     private var container : Sprite;
+    private var centerMarker : Sprite;
     private var text : TextField;
 	
 	public function new () {
@@ -18,24 +21,30 @@ class Main extends Sprite {
 
         container = new Sprite();
         openfl.Lib.current.stage.addEventListener(Event.RESIZE, function(event : Event) {
+#if !flash
             trace("onResize - TextHeight:" + text.textHeight + " TextWidth: " + text.textWidth);
+            trace("onResize - Height:" + text.height + " Width: " + text.width);
+            trace("onResize - LineMetrics:" + text.getLineMetrics(0));
+#end
             text.x = container.width/2 - text.textWidth/2; 
-            text.y = container.height/2 - text.textHeight/2; 
+            //text.y = container.height/2 - text.textHeight/2; 
         });
         container.graphics.beginFill(0xCCCCCC,1);
         container.graphics.drawRect(0,0,100,50);
         container.graphics.endFill();
+        createCenterMarker();
+
         container.addChild(text);
         container.width = text.textWidth + 4;
         container.height = text.textHeight + 4;
 
-        createCenterMarker();
-
         text.x = container.width/2 - text.textWidth/2; 
         text.y = container.height/2 - text.textHeight/2; 
+        
 
         addChild(container);
 
+        
         trace("Initial - TextHeight:" + text.textHeight + " TextWidth: " + text.textWidth);
 	}
 
@@ -45,16 +54,17 @@ class Main extends Sprite {
         text.defaultTextFormat = new TextFormat(null,30);
         text.defaultTextFormat.align = TextFormatAlign.CENTER;
         text.text = "Test Text";
+        text.background = true;
+        text.backgroundColor = 0x00FF00;
     }
 
     private function createCenterMarker() {
-        var centerMarker = new Sprite();
+        centerMarker = new Sprite();
         centerMarker.graphics.beginFill(0xCC0000,1);
-        centerMarker.graphics.drawRect(0,0,5,5);
+        centerMarker.graphics.drawRect(0,container.height/2,container.width,1);
+        centerMarker.graphics.drawRect(container.width/2,0,1,container.height);
         centerMarker.graphics.endFill();
         container.addChildAt(centerMarker,0);
-        centerMarker.x = container.width/2 - centerMarker.width/2;
-        centerMarker.y = container.height/2 - centerMarker.height/2;
     }
 
     private function onResize(event : Event) {

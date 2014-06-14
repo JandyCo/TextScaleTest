@@ -21,12 +21,12 @@ class Main extends Sprite {
 
         container = new Sprite();
         openfl.Lib.current.stage.addEventListener(Event.RESIZE, function(event : Event) {
-#if !flash
-            trace("onResize - TextHeight:" + text.textHeight + " TextWidth: " + text.textWidth);
-            trace("onResize - Height:" + text.height + " Width: " + text.width);
-            trace("onResize - LineMetrics:" + text.getLineMetrics(0));
-#end
-            text.x = container.width/2 - text.textWidth/2; 
+            text.x = (container.width - text.textWidth)/2 ;
+
+            trace("onResize - Height:" + text.height + " Width: " +text.width);
+            trace("onResize - TextHeight:" + text.textHeight + " TextWidth: " + text.textWidth  );
+            trace("x,y " + text.x + ", " 
+                + text.y  + " container height,width ", container.height * this.scaleY + ", " + container.width*this.scaleX );
             //text.y = container.height/2 - text.textHeight/2; 
         });
         container.graphics.beginFill(0xCCCCCC,1);
@@ -35,17 +35,16 @@ class Main extends Sprite {
         createCenterMarker();
 
         container.addChild(text);
-        container.width = text.textWidth + 4;
-        container.height = text.textHeight + 4;
+        container.width = 100;//text.textWidth + 4;
+        container.height = 50;//text.textHeight + 4;
 
         text.x = container.width/2 - text.textWidth/2; 
         text.y = container.height/2 - text.textHeight/2; 
         
-
         addChild(container);
 
-        
-        trace("Initial - TextHeight:" + text.textHeight + " TextWidth: " + text.textWidth);
+        trace("Initial - TextHeight:" + text.textHeight + " TextWidth: " + text.textWidth+ " x,y " + text.x + ", " + 
+                text.y + " container height,width ", container.height * this.scaleY + ", " + container.width*this.scaleX );
 	}
 
     private function createText() {
@@ -70,5 +69,7 @@ class Main extends Sprite {
     private function onResize(event : Event) {
         this.scaleX = openfl.Lib.current.stage.stageWidth/200;
         this.scaleY = openfl.Lib.current.stage.stageHeight/200;
+        trace("Stage Scale:" +" " + this.scaleX + " " + this.scaleY);
     }
+
 }
